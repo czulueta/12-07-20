@@ -14,6 +14,23 @@ bibleRouter.get("/:bibleId", (req, res) => {
     const bibleFound = bibles.find( bible => bible._id === bibleId)
     res.send(bibleFound)
 })
+bibleRouter.get("/search/author", (req, res) => {
+    const author = req.query.author 
+    const filteredBibles = bibles.findIndex( bible => bible.author === author)
+    res.send(filteredBibles)
+})
+bibleRouter.delete("/:bibleId", (req, res) => {
+    const bibleId = req.params.bibleId 
+    const bibleIndex = bibles.findIndex( bible => bible._id === bibleId)
+    bibles.splice(bibleIndex, 1)
+    res.send("Successfully deleted the bible")
+})
+bibleRouter.put("/:bibleId", (req, res) => {
+    const bibleId = req.params.bibleId 
+    const bibleIndex = bibles.findIndex( bible => bible._id === bibleId) 
+    const updatedBible = Object.assign(bibles[bibleIndex], req.body)
+    res.send(updatedBible)
+})
 bibleRouter.route("/")
     .get((req, res) => {
         res.send(bibles)
@@ -24,4 +41,6 @@ bibleRouter.route("/")
         bibles.push(newBible)
         res.send(`Successfully added ${newBible.title} to the database`)
     })
+
+    module.exports = bibleRouter
 
